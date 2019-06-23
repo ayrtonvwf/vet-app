@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Animal
+    </ion-title>
+    <ion-progress-bar type="indeterminate" [hidden]="!showProgressBar"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form" (submit)="save(form.value)">
+    <ion-item>
+      <ion-label position="floating">Dono</ion-label>
+      <ion-select formControlName="customerID">
+        <ion-select-option *ngFor="let customer of customers" [value]="customer.customerID">{{ customer.name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Raça</ion-label>
+      <ion-input formControlName="breed"></ion-input>
+    </ion-item>
+  </form>
+
+  <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="save(form.value)">
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

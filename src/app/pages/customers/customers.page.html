@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Clientes
+    </ion-title>
+    <ion-progress-bar type="indeterminate" [hidden]="!showProgressBar"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let customer of customers">
+      <ion-label>{{ customer.name }}</ion-label>
+      <ion-button color="warning" [routerLink]="['/tabs/customer', customer.customerID]">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+      <ion-button color="danger" (click)="delete(customer.customerID)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button [routerLink]="['/tabs/customer']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

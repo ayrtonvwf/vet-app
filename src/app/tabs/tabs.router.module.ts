@@ -8,42 +8,76 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'vets',
         children: [
           {
             path: '',
-            loadChildren: '../tab1/tab1.module#Tab1PageModule'
+            loadChildren: '../pages/vets/vets.module#VetsPageModule'
           }
         ]
       },
       {
-        path: 'tab2',
+        path: 'vet',
         children: [
           {
             path: '',
-            loadChildren: '../tab2/tab2.module#Tab2PageModule'
+            loadChildren: '../pages/vet/vet.module#VetPageModule'
+          },
+          {
+            path: ':id',
+            loadChildren: '../pages/vet/vet.module#VetPageModule'
           }
         ]
       },
       {
-        path: 'tab3',
+        path: 'customers',
         children: [
           {
             path: '',
-            loadChildren: '../tab3/tab3.module#Tab3PageModule'
+            loadChildren: '../pages/customers/customers.module#CustomersPageModule'
           }
         ]
       },
       {
-        path: '',
-        redirectTo: '/tabs/tab1',
-        pathMatch: 'full'
+        path: 'customer',
+        children: [
+          {
+            path: '',
+            loadChildren: '../pages/customer/customer.module#CustomerPageModule'
+          },
+          {
+            path: ':id',
+            loadChildren: '../pages/customer/customer.module#CustomerPageModule'
+          }
+        ]
+      },
+      {
+        path: 'animals',
+        children: [
+          {
+            path: '',
+            loadChildren: '../pages/animals/animals.module#AnimalsPageModule'
+          }
+        ]
+      },
+      {
+        path: 'animal',
+        children: [
+          {
+            path: '',
+            loadChildren: '../pages/animal/animal.module#AnimalPageModule'
+          },
+          {
+            path: ':id',
+            loadChildren: '../pages/animal/animal.module#AnimalPageModule'
+          }
+        ]
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: 'tabs',
     pathMatch: 'full'
   }
 ];
