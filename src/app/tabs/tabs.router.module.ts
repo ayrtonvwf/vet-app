@@ -72,7 +72,38 @@ const routes: Routes = [
             loadChildren: '../pages/animal/animal.module#AnimalPageModule'
           }
         ]
-      }
+      },
+      {
+        path: 'consultations',
+        children: [
+          {
+            path: '',
+            loadChildren: '../pages/consultations/consultations.module#ConsultationsPageModule'
+          }
+        ]
+      },
+      {
+        path: 'consultation',
+        children: [
+          {
+            path: '',
+            loadChildren: '../pages/consultation/consultation.module#ConsultationPageModule'
+          },
+          {
+            path: ':id',
+            loadChildren: '../pages/consultation/consultation.module#ConsultationPageModule'
+          }
+        ]
+      },
+      {
+        path: 'cash',
+        children: [
+          {
+            path: '',
+            loadChildren: '../pages/cash/cash.module#CashPageModule'
+          }
+        ]
+      },
     ]
   },
   {

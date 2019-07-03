@@ -20,7 +20,7 @@ export class VetPage {
   constructor(
       private route: ActivatedRoute,
       private vetService: VetService,
-      public formBuilder: FormBuilder,
+      private formBuilder: FormBuilder,
       private router: Router
   ) {
     this.form = formBuilder.group({
@@ -29,15 +29,23 @@ export class VetPage {
   }
 
   async ionViewDidEnter() {
+    this.showProgressBar = true;
+
     const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
 
-    this.vet = id ? await this.vetService.getById(id) : new VetModel();
+    await this.loadVet(id);
 
     if (id) {
       this.form.setValue({name: this.vet.name});
     }
 
     this.showProgressBar = false;
+  }
+
+  private async loadVet(id: number) {
+    this.vet = id ?
+        await this.vetService.getById(id) :
+        new VetModel();
   }
 
   goBack() {

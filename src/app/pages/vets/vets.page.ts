@@ -14,13 +14,29 @@ export class VetsPage {
   showProgressBar = true;
 
   constructor(
-      public vetService: VetService
+      private vetService: VetService
   ) {}
 
   async ionViewDidEnter() {
-    this.vets = await this.vetService.get();
+    this.showProgressBar = true;
+
+    await this.loadVets();
 
     this.showProgressBar = false;
+  }
+
+  async reload(event) {
+    await Promise.all([
+      this.vetService.load()
+    ]);
+
+    await this.ionViewDidEnter();
+
+    event.target.complete();
+  }
+
+  private async loadVets() {
+    this.vets = await this.vetService.get();
   }
 
   async delete(id: number) {

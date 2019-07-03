@@ -8,15 +8,22 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="reload($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-list>
     <ion-item *ngFor="let animal of animals">
-      <ion-label>{{ animal.breed }}</ion-label>
+      <ion-label>{{ animal.name }} ({{ animal.breed }} de {{ customers.length ? customer(animal.customerID).name : '' }})</ion-label>
       <ion-button color="warning" [routerLink]="['/tabs/animal', animal.animalID]">
         <ion-icon name="create"></ion-icon>
       </ion-button>
       <ion-button color="danger" (click)="delete(animal.animalID)">
         <ion-icon name="trash"></ion-icon>
       </ion-button>
+    </ion-item>
+    <ion-item *ngIf="!animals.length" class="ion-text-center">
+      <ion-label>Não há nenhum animal cadastrado.</ion-label>
     </ion-item>
   </ion-list>
 

@@ -8,6 +8,10 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="reload($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-list>
     <ion-item *ngFor="let customer of customers">
       <ion-label>{{ customer.name }}</ion-label>
@@ -17,6 +21,9 @@
       <ion-button color="danger" (click)="delete(customer.customerID)">
         <ion-icon name="trash"></ion-icon>
       </ion-button>
+    </ion-item>
+    <ion-item *ngIf="!customers.length" class="ion-text-center">
+      <ion-label>Não há nenhum cliente cadastrado.</ion-label>
     </ion-item>
   </ion-list>
 

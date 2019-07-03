@@ -21,7 +21,7 @@ export class VetService {
         this.items.push(response.data);
     }
 
-    private async load() {
+    async load() {
         const response = await axios.get<VetModel[]>(this.baseUrl);
         this.items = response.data;
         this.loaded = true;

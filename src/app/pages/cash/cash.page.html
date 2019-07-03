@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Caixa
+    </ion-title>
+    <ion-progress-bar type="indeterminate" [hidden]="!showProgressBar"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="reload($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Data inicial</ion-label>
+          <ion-datetime [(ngModel)]="startDate" (ionChange)="loadList()"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item>
+          <ion-label position="floating">Data final</ion-label>
+          <ion-datetime [(ngModel)]="endDate" (ionChange)="loadList()"></ion-datetime>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <div text-center>
+      <ion-chip (click)="toggleFilterPaid()" outline [color]="showPaid ? 'primary' : ''">
+        <ion-label>Pago</ion-label>
+      </ion-chip>
+      <ion-chip (click)="toggleFilterUnpaid()" outline [color]="showUnpaid ? 'primary' : ''">
+        <ion-label>Pagemento pendente</ion-label>
+      </ion-chip>
+      <ion-chip (click)="toggleFilterExpired()" outline [color]="showExpired ? 'primary' : ''">
+        <ion-label>Atrasado</ion-label>
+      </ion-chip>
+      <ion-chip (click)="unsetFilters()">
+        <ion-label>Limpar filtros</ion-label>
+      </ion-chip>
+    </div>
+
+    <ion-row text-center>
+      <ion-col size="4">
+        <p>Saldo anterior</p>
+        <ion-text color="primary">{{ localMoney(previousBalance) }}</ion-text>
+      </ion-col>
+      <ion-col size="4">
+        <p>Items atuais</p>
+        <ion-text color="secondary">{{ localMoney(currentBalance) }}</ion-text>
+      </ion-col>
+      <ion-col size="4">
+        <p>Total</p>
+        <ion-text color="tertiary">{{ localMoney(previousBalance + currentBalance) }}</ion-text>
+      </ion-col>
+    </ion-row>
+  </div>
+  <ion-list>
+    <ion-item *ngFor="let consultation of list">
+      <ion-label>
+        <div float-left>
+          <span>
+            {{ localMoney(consultation.value) }}
+          </span>
+          <div>
+            <ion-badge *ngIf="consultation.paidAt === null && consultation.paymentExpiration > today && consultation.date <= today" color="medium">Pagamento pendente</ion-badge>
+            <ion-badge *ngIf="consultation.paidAt === null && consultation.paymentExpiration === today" color="warning">Vence hoje</ion-badge>
+            <ion-badge *ngIf="consultation.paidAt === null && consultation.paymentExpiration < today" color="danger">Atrasado</ion-badge>
+          </div>
+        </div>
+        <div text-right>
+          <p>{{ localDate(consultation.date) }}</p>
+          <p>{{ animal(consultation.animalID).name }} ({{ animal(consultation.animalID).breed }} de {{ customerOfAnimal(consultation.animalID).name }})</p>
+        </div>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="!list.length" class="ion-text-center">
+      <ion-label>Não há nenhum movimento de caixa<span *ngIf="consultations.length"> com os filtros selecionados</span></ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

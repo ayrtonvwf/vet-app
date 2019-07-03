@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Consultas
+    </ion-title>
+    <ion-progress-bar type="indeterminate" [hidden]="!showProgressBar"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="reload($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <br>
+  <div text-center>
+    <ion-chip (click)="toggleFilterPaid()" outline [color]="showPaid ? 'primary' : ''">
+      <ion-label>Pago</ion-label>
+    </ion-chip>
+    <ion-chip (click)="toggleFilterUnpaid()" outline [color]="showUnpaid ? 'primary' : ''">
+      <ion-label>Pagemento pendente</ion-label>
+    </ion-chip>
+    <ion-chip (click)="toggleFilterExpired()" outline [color]="showExpired ? 'primary' : ''">
+      <ion-label>Atrasado</ion-label>
+    </ion-chip>
+    <ion-chip (click)="toggleFilterScheduled()" outline [color]="showScheduled ? 'primary' : ''">
+      <ion-label>Agendado</ion-label>
+    </ion-chip>
+    <ion-chip (click)="toggleFilterDone()" outline [color]="showDone ? 'primary' : ''">
+      <ion-label>Feito</ion-label>
+    </ion-chip>
+    <ion-chip (click)="unsetFilters()">
+      <ion-label>Limpar filtros</ion-label>
+    </ion-chip>
+  </div>
+  <ion-list>
+    <ion-item *ngFor="let consultation of list">
+      <ion-label>
+        <span>
+          {{ consultation.description }}
+          <ion-badge *ngIf="consultation.paidAt === null && consultation.paymentExpiration > today && consultation.date <= today" color="medium">Pagamento pendente</ion-badge>
+          <ion-badge *ngIf="consultation.paidAt === null && consultation.paymentExpiration === today" color="warning">Vence hoje</ion-badge>
+          <ion-badge *ngIf="consultation.paidAt === null && consultation.paymentExpiration < today" color="danger">Atrasado</ion-badge>
+          <ion-badge *ngIf="consultation.date > today">Agendado</ion-badge>
+        </span>
+        <p>{{ localDate(consultation.date) }}</p>
+        <p>{{ animal(consultation.animalID).name }} ({{ animal(consultation.animalID).breed }} de {{ customerOfAnimal(consultation.animalID).name }})</p>
+      </ion-label>
+      <ion-button color="warning" [routerLink]="['/tabs/consultation', consultation.consultationID]">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+      <ion-button color="danger" (click)="delete(consultation.consultationID)">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-item *ngIf="!list.length" class="ion-text-center">
+      <ion-label>Não há nenhuma consulta<span *ngIf="consultations.length"> com os filtros selecionados</span></ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button [routerLink]="['/tabs/consultation']">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

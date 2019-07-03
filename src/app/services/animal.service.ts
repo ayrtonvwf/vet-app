@@ -21,7 +21,7 @@ export class AnimalService {
         this.items.push(response.data);
     }
 
-    private async load() {
+    async load() {
         const response = await axios.get<AnimalModel[]>(this.baseUrl);
         this.items = response.data;
         this.loaded = true;
@@ -53,10 +53,16 @@ export class AnimalService {
         return await this.findId(id);
     }
 
-    async findId(id: number) {
+    private async findId(id: number) {
         const items = await this.get();
 
         return items.find(animal => animal.animalID === id);
+    }
+
+    async getByCustomerId(customerID: number) {
+        const items = await this.get();
+
+        return items.filter(animal => animal.customerID === customerID);
     }
 
     private async update(animal: AnimalModel) {

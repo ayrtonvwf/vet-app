@@ -19,9 +19,11 @@ export class ConsultationService {
         const response = await axios.post<ConsultationModel>(this.baseUrl, consultation);
 
         this.items.push(response.data);
+
+        return response.data;
     }
 
-    private async load() {
+    async load() {
         const response = await axios.get<ConsultationModel[]>(this.baseUrl);
         this.items = response.data;
         this.loaded = true;
@@ -67,6 +69,8 @@ export class ConsultationService {
         const index = this.items.findIndex(item => item.consultationID === consultation.consultationID);
 
         this.items[index] = response.data;
+
+        return response.data;
     }
 
     async delete(id: number) {

@@ -25,30 +25,45 @@ export class AnimalPage {
       private route: ActivatedRoute,
       private animalService: AnimalService,
       private customerService: CustomerService,
-      public formBuilder: FormBuilder,
+      private formBuilder: FormBuilder,
       private router: Router
   ) {
     this.form = formBuilder.group({
       breed: new FormControl('', Validators.required),
-      customerID: new FormControl('', Validators.required)
+      customerID: new FormControl('', Validators.required),
+      name: new FormControl('', Validators.required)
     });
   }
 
   async ionViewDidEnter() {
+    this.showProgressBar = true;
+
     const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
 
-    this.animal = id ? await this.animalService.getById(id) : new AnimalModel();
+    await Promise.all([
+      this.loadAnimal(id),
+      this.loadCustomers()
+    ]);
 
     if (id) {
       this.form.setValue({
         breed: this.animal.breed,
-        customerID: this.animal.customerID
+        customerID: this.animal.customerID,
+        name: this.animal.name
       });
     }
 
-    this.customers = await this.customerService.get();
-
     this.showProgressBar = false;
+  }
+
+  private async loadAnimal(id: number) {
+    this.animal = id ?
+        await this.animalService.getById(id) :
+        new AnimalModel();
+  }
+
+  private async loadCustomers() {
+    this.customers = await this.customerService.get();
   }
 
   goBack() {
@@ -58,6 +73,7 @@ export class AnimalPage {
   async save(value) {
     this.showProgressBar = true;
 
+    this.animal.name = value.name;
     this.animal.breed = value.breed;
     this.animal.customerID = value.customerID;
 

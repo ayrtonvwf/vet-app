@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Consulta
+    </ion-title>
+    <ion-progress-bar type="indeterminate" [hidden]="!showProgressBar"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form" (submit)="save(form.value)">
+    <ion-item>
+      <ion-label position="floating">Veterinário</ion-label>
+      <ion-select formControlName="vetID">
+        <ion-select-option *ngFor="let vet of vets" [value]="vet.vetID">{{ vet.name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Dono</ion-label>
+      <ion-select formControlName="customerID" (ionChange)="changeCustomer()">
+        <ion-select-option *ngFor="let customer of customers" [value]="customer.customerID">{{ customer.name }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Animal</ion-label>
+      <ion-select formControlName="animalID">
+        <ion-select-option *ngFor="let animal of animals" [value]="animal.animalID">{{ animal.name }} ({{ animal.breed }})</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Data da Consulta</ion-label>
+      <ion-datetime formControlName="date" displayFormat="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Descrição</ion-label>
+      <ion-input formControlName="description"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Valor</ion-label>
+      <ion-input formControlName="value" [brmasker]="{money: true}"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Já foi pago</ion-label>
+      <ion-toggle formControlName="paid"></ion-toggle>
+    </ion-item>
+
+    <ion-item [hidden]="form.value.paid">
+      <ion-label position="floating">Vencimento do Pagamento</ion-label>
+      <ion-datetime formControlName="paymentExpiration" displayFormat="DD/MM/YYYY"></ion-datetime>
+    </ion-item>
+
+    <ion-row>
+      <ion-col size="10" [offset]="1">
+        <ion-list formArrayName="prescriptions">
+          <ion-list-header>
+            <ion-label>Prescrições</ion-label>
+            <ion-button (click)="addPrescription()" size="small">
+              <ion-icon name="add"></ion-icon>
+            </ion-button>
+          </ion-list-header>
+          <ion-item *ngFor="let prescription of formPrescriptions.controls; let i = index">
+            <ion-label position="floating">Descrição</ion-label>
+            <ion-input [formControlName]="i"></ion-input>
+            <ion-button slot="end" color="danger" (click)="removePrescription(i)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </form>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="save(form.value)">
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

@@ -20,7 +20,7 @@ export class CustomerPage {
   constructor(
       private route: ActivatedRoute,
       private customerService: CustomerService,
-      public formBuilder: FormBuilder,
+      private formBuilder: FormBuilder,
       private router: Router
   ) {
     this.form = formBuilder.group({
@@ -29,15 +29,23 @@ export class CustomerPage {
   }
 
   async ionViewDidEnter() {
+    this.showProgressBar = true;
+
     const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
 
-    this.customer = id ? await this.customerService.getById(id) : new CustomerModel();
+    await this.loadCustomer(id);
 
     if (id) {
       this.form.setValue({name: this.customer.name});
     }
 
     this.showProgressBar = false;
+  }
+
+  private async loadCustomer(id: number) {
+    this.customer = id ?
+        await this.customerService.getById(id) :
+        new CustomerModel();
   }
 
   goBack() {

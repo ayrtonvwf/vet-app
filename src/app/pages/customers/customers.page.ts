@@ -14,13 +14,29 @@ export class CustomersPage {
   showProgressBar = true;
 
   constructor(
-      public customerService: CustomerService
+      private customerService: CustomerService
   ) {}
 
   async ionViewDidEnter() {
-    this.customers = await this.customerService.get();
+    this.showProgressBar = true;
+
+    await this.loadCustomers();
 
     this.showProgressBar = false;
+  }
+
+  async reload(event) {
+    await Promise.all([
+      this.customerService.load()
+    ]);
+
+    await this.ionViewDidEnter();
+
+    event.target.complete();
+  }
+
+  private async loadCustomers() {
+    this.customers = await this.customerService.get();
   }
 
   async delete(id: number) {

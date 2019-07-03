@@ -21,7 +21,7 @@ export class CustomerService {
         this.items.push(response.data);
     }
 
-    private async load() {
+    async load() {
         const response = await axios.get<CustomerModel[]>(this.baseUrl);
         this.items = response.data;
         this.loaded = true;
